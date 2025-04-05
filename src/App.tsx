@@ -1,34 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import { LoginForm } from './components/login-form'
+import { Dashboard } from './components/dashboard'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [session, setSession] = useState<boolean | null>(null)
+  const supabase = createClient()
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      setSession(!!user)
+    }
+    checkUser()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_IN') setSession(true)
+      if (event === 'SIGNED_OUT') setSession(false)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  // if (session === null) {
+  //   return (
+  //     <div className="flex min-h-screen items-center justify-center">
+  //       <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600" />
+  //     </div>
+  //   )
+  // }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="w-full mx-auto min-h-screen flex items-center justify-center">
+      {session ? (
+      <Dashboard/>
+      ) : (
+      <LoginForm className="container max-w-md w-full mx-auto py-8" />
+      )}
+    </div>
   )
 }
 

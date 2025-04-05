@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { LoginForm } from './components/login-form'
 import { Dashboard } from './components/dashboard'
+import { SignUpForm } from './components/sign-up-form'
+import { ForgotPasswordForm } from './components/forgot-password-form'
+import { UpdatePasswordForm } from './components/update-password-form'
 
 function App() {
   const [session, setSession] = useState<boolean | null>(null)
@@ -31,13 +35,26 @@ function App() {
   // }
 
   return (
-    <div className="min-h-screen grid place-items-center antialiased px-4 py-8">
-      {session ? (
-        <Dashboard />
-      ) : (
-        <LoginForm className="w-full max-w-[400px]" />
-      )}
-    </div>
+    <BrowserRouter>
+      <div className="h-full w-full place-items-center antialiased ">
+        <Routes>
+          {session ? (
+            <>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            </>
+          ) : (
+            <>
+              <Route path="/login" element={<LoginForm className="w-full max-w-[400px] px-4 py-8" />} />
+              <Route path="/signup" element={<SignUpForm className="w-full max-w-[400px]" />} />
+              <Route path="/forgot-password" element={<ForgotPasswordForm className="w-full max-w-[400px]" />} />
+              <Route path="/update-password" element={<UpdatePasswordForm className="w-full max-w-[400px]" />} />
+              <Route path="*" element={<Navigate to="/login" replace />} />
+            </>
+          )}
+        </Routes>
+      </div>
+    </BrowserRouter>
   )
 }
 

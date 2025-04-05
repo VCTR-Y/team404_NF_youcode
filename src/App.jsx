@@ -3,6 +3,7 @@ import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 import { supabase } from './lib/supabase'
 import './App.css'
+import './index.css'
 
 function Dashboard({ session }) {
   return (
@@ -44,7 +45,7 @@ function App() {
           <Auth
             supabaseClient={supabase}
             appearance={{ theme: ThemeSupa }}
-            providers={['google', 'github']}
+            providers={[]}
           />
         </div>
       ) : (

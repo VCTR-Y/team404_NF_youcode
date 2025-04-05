@@ -40,16 +40,16 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
   }
 
   return (
-    <div className={cn('flex flex-col gap-6', className)} {...props}>
-      <Card>
+    <div className={cn('grid gap-6', className)} {...props}>
+      <Card className="w-full">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>Enter your email below to login to your account</CardDescription>
+          <CardTitle className="text-2xl font-semibold">Login</CardTitle>
+          <CardDescription>Enter your email and password to login to your account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
+            <div className="grid gap-4">
+              <div className="grid gap-1">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
@@ -60,12 +60,12 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              <div className="grid gap-2">
+              <div className="grid gap-1">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                   <a
                     href="/forgot-password"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                    className="ml-auto inline-block text-sm text-muted-foreground hover:text-primary"
                   >
                     Forgot your password?
                   </a>
@@ -83,9 +83,9 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                 {isLoading ? 'Logging in...' : 'Login'}
               </Button>
             </div>
-            <div className="mt-4 text-center text-sm">
+            <div className="mt-4 text-center text-sm text-muted-foreground">
               Don&apos;t have an account?{' '}
-              <a href="/sign-up" className="underline underline-offset-4">
+              <a href="/sign-up" className="text-primary hover:underline">
                 Sign up
               </a>
             </div>

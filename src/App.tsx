@@ -31,11 +31,11 @@ function App() {
   // }
 
   return (
-    <div className="w-full mx-auto min-h-screen flex items-center justify-center">
+    <div className="min-h-screen grid place-items-center antialiased px-4 py-8">
       {session ? (
-      <Dashboard/>
+        <Dashboard />
       ) : (
-      <LoginForm className="container max-w-md w-full mx-auto py-8" />
+        <LoginForm className="w-full max-w-[400px]" />
       )}
     </div>
   )

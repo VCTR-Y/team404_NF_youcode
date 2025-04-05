@@ -1,22 +1,99 @@
+import { useEffect, useState } from 'react'
 import { Navbar } from './navbar'
+import { createClient } from '../lib/supabase/client'
+
+type FoodCategory = 'dairy_and_eggs' | 'meat' | 'vegetables' | 'fruits' | 'grains' | 'beverages' | 'snacks' | 'condiments' | 'leftovers'
+
+type FoodItem = {
+  id: string
+  name: string
+  expiry_date: string
+  category: FoodCategory
+  quantity: number
+}
+
+const categories: FoodCategory[] = [
+  'dairy_and_eggs',
+  'meat',
+  'vegetables',
+  'fruits',
+  'grains',
+  'beverages',
+  'snacks',
+  'condiments',
+  'leftovers'
+]
 
 export function Dashboard() {
+  const [selectedCategory, setSelectedCategory] = useState<FoodCategory | null>(null)
+  const [foodItems, setFoodItems] = useState<FoodItem[]>([])
+
+  const supabase = createClient()
+
+  useEffect(() => {
+    fetchFoodItems()
+  }, [selectedCategory])
+
+  async function fetchFoodItems() {
+    let query = supabase.from('food_items').select('*')
+    if (selectedCategory) {
+      query = query.eq('category', selectedCategory)
+    }
+    const { data, error } = await query
+    if (error) {
+      console.error('Error fetching food items:', error)
+      return
+    }
+    setFoodItems(data || [])
+  }
+
+  function formatCategory(category: string): string {
+    return category
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="h-full">
       <Navbar />
       <main className="container mx-auto py-8">
-        <div className="grid gap-6">
-          <div className="rounded-lg border bg-white p-6 shadow-sm">
-            <h2 className="text-xl font-semibold mb-4">Welcome to Your Dashboard</h2>
-            <p className="text-gray-600">
-              This is your personalized dashboard where you can manage your account and access key features.
-            </p>
+        <div className="space-y-6">
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setSelectedCategory(null)}
+              className={`px-4 py-2 rounded-full text-sm font-medium ${
+                selectedCategory === null
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+              }`}
+            >
+              All
+            </button>
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-4 py-2 rounded-full text-sm font-medium ${
+                  selectedCategory === category
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                }`}
+              >
+                {formatCategory(category)}
+              </button>
+            ))}
           </div>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="rounded-lg border bg-white p-6 shadow-sm">
-                <h3 className="font-semibold mb-2">Card {i}</h3>
-                <p className="text-gray-600">This is a sample card that you can customize with your content.</p>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {foodItems.map((item) => (
+              <div key={item.id} className="rounded-lg border bg-card p-6 shadow-sm">
+                <h3 className="font-semibold mb-2">{item.name}</h3>
+                <div className="space-y-1 text-sm text-muted-foreground">
+                  <p>Category: {formatCategory(item.category)}</p>
+                  <p>Quantity: {item.quantity}</p>
+                  <p>Expires: {new Date(item.expiry_date).toLocaleDateString()}</p>
+                </div>
               </div>
             ))}
           </div>

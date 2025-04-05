@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
+import { useNavigate, Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -17,6 +18,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate()
   const supabase = createClient()
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -30,8 +32,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
         password,
       })
       if (error) throw error
-      // Update this route to redirect to an authenticated route. The user already has an active session.
-      location.href = '/info'
+      navigate('/dashboard')
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'An error occurred')
     } finally {
@@ -63,12 +64,12 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
               <div className="grid gap-1">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <a
-                    href="/forgot-password"
+                  <Link
+                    to="/forgot-password"
                     className="ml-auto inline-block text-sm text-muted-foreground hover:text-primary"
                   >
                     Forgot your password?
-                  </a>
+                  </Link>
                 </div>
                 <Input
                   id="password"
@@ -85,9 +86,9 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
             </div>
             <div className="mt-4 text-center text-sm text-muted-foreground">
               Don&apos;t have an account?{' '}
-              <a href="/sign-up" className="text-primary hover:underline">
+              <Link to="/signup" className="text-primary hover:underline">
                 Sign up
-              </a>
+              </Link>
             </div>
           </form>
         </CardContent>

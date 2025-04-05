@@ -35,26 +35,24 @@ function App() {
   // }
 
   return (
-    <BrowserRouter>
-      <div className="h-full w-full place-items-center antialiased ">
-        <Routes>
-          {session ? (
-            <>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="*" element={<Navigate to="/dashboard" replace />} />
-            </>
-          ) : (
-            <>
-              <Route path="/login" element={<LoginForm className="w-full max-w-[400px] px-4 py-8" />} />
-              <Route path="/signup" element={<SignUpForm className="w-full max-w-[400px]" />} />
-              <Route path="/forgot-password" element={<ForgotPasswordForm className="w-full max-w-[400px]" />} />
-              <Route path="/update-password" element={<UpdatePasswordForm className="w-full max-w-[400px]" />} />
-              <Route path="*" element={<Navigate to="/login" replace />} />
-            </>
-          )}
-        </Routes>
-      </div>
-    </BrowserRouter>
+<BrowserRouter>
+  {session ? (
+    <Routes>
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+    </Routes>
+  ) : (
+    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+      <Routes>
+        <Route path="/login" element={<LoginForm className="w-full max-w-[400px]" />} />
+        <Route path="/signup" element={<SignUpForm className="w-full max-w-[400px]" />} />
+        <Route path="/forgot-password" element={<ForgotPasswordForm className="w-full max-w-[400px]" />} />
+        <Route path="/update-password" element={<UpdatePasswordForm className="w-full max-w-[400px]" />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </div>
+  )}
+</BrowserRouter>
   )
 }
 

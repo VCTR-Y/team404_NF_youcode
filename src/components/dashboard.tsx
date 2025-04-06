@@ -49,7 +49,12 @@ export function Dashboard() {
       console.error('Error fetching food items:', error)
       return
     }
-    setFoodItems(data || [])
+    const today = new Date()
+    const validItems = (data || []).filter(item => {
+      const expiryDate = new Date(item.expiry_date + 'T12:00:00')
+      return expiryDate >= today
+    })
+    setFoodItems(validItems)
   }
 
   function formatCategory(category: string): string {

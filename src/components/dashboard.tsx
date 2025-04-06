@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Navbar } from './navbar'
 import { createClient } from '../lib/supabase/client'
+import { ImageAnalyzer } from './image-analyzer'
+import { Button } from './ui/button'
 
 type FoodCategory = 'dairy_and_eggs' | 'meat' | 'vegetables' | 'fruits' | 'grains' | 'beverages' | 'snacks' | 'condiments' | 'leftovers'
 
@@ -27,6 +29,7 @@ const categories: FoodCategory[] = [
 export function Dashboard() {
   const [selectedCategory, setSelectedCategory] = useState<FoodCategory | null>(null)
   const [foodItems, setFoodItems] = useState<FoodItem[]>([])
+  const [showAnalyzer, setShowAnalyzer] = useState(false)
 
   const supabase = createClient()
 
@@ -84,6 +87,17 @@ export function Dashboard() {
               </button>
             ))}
           </div>
+
+          <div className="flex justify-end mb-4">
+            <Button
+              variant={showAnalyzer ? "secondary" : "default"}
+              onClick={() => setShowAnalyzer(!showAnalyzer)}
+            >
+              {showAnalyzer ? "Hide Analyzer" : "Analyze Food"}
+            </Button>
+          </div>
+
+          {showAnalyzer && <ImageAnalyzer />}
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {foodItems.map((item) => (

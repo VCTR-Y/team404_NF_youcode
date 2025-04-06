@@ -128,4 +128,10 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  :root {
+    --background: 0 0% 100%;
+   }
+   .dark{
+    --background: 0 0 8;
+   }
 }

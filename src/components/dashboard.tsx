@@ -117,7 +117,7 @@ export function Dashboard() {
                 <div className="space-y-1 text-sm text-muted-foreground">
                   <p>Category: {formatCategory(item.category)}</p>
                   <p>Quantity: {item.quantity}</p>
-                  <p>Expires: {new Date(item.expiry_date).toLocaleDateString()}</p>
+                  <p>Expires: {new Date(item.expiry_date + 'T12:00:00').toLocaleDateString()}</p>
                 </div>
               </Link>
             ))}

@@ -107,6 +107,9 @@ export function Navbar() {
                 <DropdownMenuItem onClick={() => setShowSettings(true)}>
                   Settings
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/my-postings">My Postings</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout}>
                   Logout
                 </DropdownMenuItem>

@@ -7,9 +7,10 @@ import { Dashboard } from "./components/dashboard";
 import { SignUpForm } from "./components/sign-up-form";
 import { ForgotPasswordForm } from "./components/forgot-password-form";
 import { UpdatePasswordForm } from "./components/update-password-form";
-import { FoodDetailPage } from "./components/FoodDetailPage"; // Import the new component
+import { FoodDetailPage } from "./components/FoodDetailPage";
 import { DonateForm } from "./components/donate-form";
 import { PlatefulLandingPage } from "./components/LandingPage";
+import { MyPostings } from "./components/MyPostings"; 
 
 function App() {
   const [session, setSession] = useState<boolean | null>(null);
@@ -50,8 +51,9 @@ function App() {
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/food/:id" element={<FoodDetailPage />} />
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
             <Route path="/donate" element={<DonateForm />} />
+            <Route path="/my-postings" element={<MyPostings />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         ) : (
           <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">

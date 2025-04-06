@@ -54,7 +54,7 @@ export function MyPostings() {
     // Optional: Add a confirmation dialog here
 
     const { error } = await supabase
-      .from('donations')
+      .from('food_items')
       .delete()
       .match({ id: postId, user_id: userId });
 

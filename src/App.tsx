@@ -7,6 +7,7 @@ import { SignUpForm } from './components/sign-up-form';
 import { ForgotPasswordForm } from './components/forgot-password-form';
 import { UpdatePasswordForm } from './components/update-password-form';
 import { FoodDetailPage } from './components/FoodDetailPage'; // Import the new component
+import { DonateForm } from './components/donate-form'; // Import the donate form component
 
 function App() {
   const [session, setSession] = useState<boolean | null>(null)

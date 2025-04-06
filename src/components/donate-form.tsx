@@ -63,7 +63,8 @@ export function DonateForm() {
                 return;
             }
 
-            if (date === undefined) {
+            let expiryDate = date;
+            if (expiryDate === undefined) {
                 try {
                     const analysis = await analyzeFoodImage(props.files[0]);
                     
@@ -73,7 +74,8 @@ export function DonateForm() {
                         return;
                     }
 
-                    setDate(new Date(analysis.predictedExpiryDate));
+                    expiryDate = new Date(analysis.predictedExpiryDate);
+                    setDate(expiryDate);
                 } catch (error: unknown) {
                     const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
                     console.error("AI Analysis error:", errorMessage);
@@ -128,7 +130,7 @@ export function DonateForm() {
                         name: name,
                         category: foodType,
                         quantity: quantity,
-                        expiry_date: date.toISOString(),
+                        expiry_date: expiryDate.toISOString(),
                         image_url: imageUrl,
                         user_id: userId,
                     }

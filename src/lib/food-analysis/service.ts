@@ -8,7 +8,7 @@ import { FoodAnalysisResult, ImageAnalysisError } from "./types";
 //   "predictedExpiryDate": "<YYYY-MM-DD>"
 // }`;
 
-const FOOD_ANALYSIS_PROMPT = `Today's date is ${new Date().toLocaleDateString()}. Analyze this food image and determine its freshness and expected expiry date. The date should be realistic`;
+const FOOD_ANALYSIS_PROMPT = `Today's date is ${new Date().toLocaleDateString()}. Analyze this food image and determine its freshness and expected expiry date. The date should be realistic, so if it's not expired, the date must be today or in the future.`;
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 if (!apiKey) {
   throw new Error('VITE_GEMINI_API_KEY environment variable is missing');

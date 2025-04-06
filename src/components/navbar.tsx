@@ -117,7 +117,7 @@ export function Navbar() {
       </div>
 
       <Dialog open={showSettings} onOpenChange={setShowSettings}>
-        <DialogContent className="bg-background">
+        <DialogContent className='bg-white dark:bg-black'>
           <DialogHeader>
             <DialogTitle>Update Profile</DialogTitle>
           </DialogHeader>

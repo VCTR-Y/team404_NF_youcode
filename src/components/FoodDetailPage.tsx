@@ -16,8 +16,10 @@ type FoodItemDetail = {
 
 type UserProfile = {
   id: string;
-  full_name?: string;
-  email?: string;
+  first_name?: string;
+  last_name?: string;
+  address?: string;
+  phone_number?: string;
 };
 
 export function FoodDetailPage() {
@@ -59,8 +61,8 @@ export function FoodDetailPage() {
 
       if (itemData.user_id) {
         const { data: profileData, error: profileError } = await supabase
-          .from('users')
-          .select('id, full_name, email')
+          .from('profiles')
+          .select('id, first_name, last_name, address, phone_number')
           .eq('id', itemData.user_id)
           .single();
 
@@ -116,8 +118,9 @@ export function FoodDetailPage() {
             {poster && (
               <div className="border-t pt-4 mt-4">
                 <h3 className="text-lg font-medium mb-2">Posted By:</h3>
-                <p><strong>Name:</strong> {poster.full_name || 'N/A'}</p>
-                <p><strong>Contact:</strong> {poster.email || 'Not available'}</p> 
+                <p><strong>Name:</strong> {poster.first_name || 'N/A'}  {poster.last_name || 'N/A'} </p>
+                <p><strong>Contact (phone number):</strong> {poster.phone_number || 'Not available'}</p> 
+                <p><strong>Address:</strong> {poster.address || 'Not available'}</p>
               </div>
             )}
             {!poster && foodItem.user_id && !loading && (

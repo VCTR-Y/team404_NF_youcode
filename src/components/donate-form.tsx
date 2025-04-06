@@ -123,7 +123,6 @@ export function DonateForm() {
                 throw insertError;
             }
 
-            // 5. Success feedback and reset/redirect
             alert("Food item donated successfully!");
             // Reset form state (optional, depends on desired UX)
             // setName("");

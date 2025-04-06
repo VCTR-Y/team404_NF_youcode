@@ -33,7 +33,7 @@ export function PlatefulLandingPage() {
         <img
           src={foodSharing}
           alt="Food Sharing"
-          className="h-full w-full object-fill"
+          className="h-full w-full object-contain"
         />
       </div>
     </div>

@@ -186,13 +186,13 @@ export function FoodDetailPage() {
 
         {/* Modal for Recipes */}
         {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="fixed inset-0 bg-white dark:bg-black bg-opacity-50 flex justify-center items-center">
             <div className="bg-background rounded-lg p-8 max-w-2xl w-full h-auto">
-              <h3 className="text-xl font-medium mb-4">Recipe Idea</h3>
+              <h3 className="text-xl font-medium mb-4 text-black dark:text-white">Recipe Idea</h3>
               {recipes && recipes.length > 0 ? (
-                <p>{recipes[0]}</p>
+                <p className="text-black dark:text-white">{recipes[0]}</p>
               ) : (
-                <p>No recipe found.</p>
+                <p className="text-black dark:text-white">No recipe found.</p>
               )}
               <button
                 onClick={() => setIsModalOpen(false)}

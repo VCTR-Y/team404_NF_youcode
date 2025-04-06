@@ -82,7 +82,7 @@ function App() {
                 element={<Navigate to="/landingPage" replace />}
               />
             </Routes>
-          </div>
+           </div>
         )}
       </BrowserRouter>
     </>

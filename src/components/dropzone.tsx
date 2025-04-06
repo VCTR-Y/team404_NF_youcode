@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import { type UseSupabaseUploadReturn } from '@/hooks/use-supabase-upload'
 import { Button } from '@/components/ui/button'
-import { CheckCircle, File, Loader2, Upload, X } from 'lucide-react'
+import { CheckCircle, File, Upload, X } from 'lucide-react'
 import { createContext, type PropsWithChildren, useCallback, useContext } from 'react'
 
 export const formatBytes = (
@@ -63,7 +63,6 @@ const DropzoneContent = ({ className }: { className?: string }) => {
   const {
     files,
     setFiles,
-    onUpload,
     loading,
     successes,
     errors,
@@ -96,7 +95,7 @@ const DropzoneContent = ({ className }: { className?: string }) => {
     <div className={cn('flex flex-col', className)}>
       {files.map((file, idx) => {
         const fileError = errors.find((e) => e.name === file.name)
-        const isSuccessfullyUploaded = !!successes.find((e) => e === file.name)
+        const isSuccessfullyUploaded = Boolean(successes.find((e) => e === file.name))
 
         return (
           <div
@@ -129,7 +128,7 @@ const DropzoneContent = ({ className }: { className?: string }) => {
                 </p>
               ) : loading && !isSuccessfullyUploaded ? (
                 <p className="text-xs text-muted-foreground">Uploading file...</p>
-              ) : !!fileError ? (
+              ) : fileError ? (
                 <p className="text-xs text-destructive">Failed to upload: {fileError.message}</p>
               ) : isSuccessfullyUploaded ? (
                 <p className="text-xs text-primary">Successfully uploaded file</p>
@@ -157,7 +156,7 @@ const DropzoneContent = ({ className }: { className?: string }) => {
           {files.length - maxFiles > 1 ? 's' : ''}.
         </p>
       )}
-      {files.length > 0 && !exceedMaxFiles && (
+      {/* {files.length > 0 && !exceedMaxFiles && (
         <div className="mt-2">
           <Button
             variant="outline"
@@ -174,7 +173,7 @@ const DropzoneContent = ({ className }: { className?: string }) => {
             )}
           </Button>
         </div>
-      )}
+      )} */}
     </div>
   )
 }
@@ -190,7 +189,7 @@ const DropzoneEmptyState = ({ className }: { className?: string }) => {
     <div className={cn('flex flex-col items-center gap-y-2', className)}>
       <Upload size={20} className="text-muted-foreground" />
       <p className="text-sm">
-        Upload{!!maxFiles && maxFiles > 1 ? ` ${maxFiles}` : ''} file
+        Upload{maxFiles && maxFiles > 1 ? ` ${maxFiles}` : ''} file
         {!maxFiles || maxFiles > 1 ? 's' : ''}
       </p>
       <div className="flex flex-col items-center gap-y-1">

@@ -24,49 +24,129 @@ import { Button } from "@/components/ui/button"
 
 import { Dropzone, DropzoneContent, DropzoneEmptyState } from "./dropzone"
 import { useSupabaseUpload } from '@/hooks/use-supabase-upload'
-import { format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
-import { useState } from "react"
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { useNavigate } from "react-router-dom"; 
 
 
 export function DonateForm() {
+    const bucketName = 'food_images';
+    const uploadPath = '/';
+
     const props = useSupabaseUpload({
-        bucketName: 'food_images',
-        path: '/',
+        bucketName: bucketName,
+        path: uploadPath,
         allowedMimeTypes: ['image/*'],
         maxFiles: 1,
-        maxFileSize: 1000 * 1000 * 10, // 10MB,
+        maxFileSize: 1000 * 1000 * 10,
     })
 
     const [name, setName] = useState("");
     const [foodType, setFoodType] = useState("");
-    const [quantity, setQuantity] = useState(null);
-    const [date, setDate] = useState<Date>();
+    const [quantity, setQuantity] = useState<number | null>(null);
+    const [date, setDate] = useState<Date | undefined>();
+    const [isSubmitting, setIsSubmitting] = useState(false); 
+    const supabase = createClient();
+    const navigate = useNavigate();
 
     const submitForm = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (foodType === "") {
-            alert("Please select a food type.");
-            return;
-        }
+        setIsSubmitting(true);
 
-        if (date === undefined) {
-            alert("Please select a date.");
-            return;
-        }
+        try {
+            if (props.files.length === 0) {
+                alert("Please upload an image.");
+                setIsSubmitting(false);
+                return;
+            }
 
-        if (props.files.length === 0) {
-            alert("Please upload an image.");
-            return;
-        }
-        
-        // handle form submission logic here
+            await props.onUpload();
 
-    }
+            // if (props.errors.length > 0) {
+            //     alert(`Upload failed: ${props.errors[0].message}`);
+            //     setIsSubmitting(false);
+            //     return;
+            // }
+
+            // if (props.successes.length === 0) {
+            //     alert("Upload did not complete successfully. Please try again.");
+            //     setIsSubmitting(false);
+            //     return;
+            // }
+
+            if (foodType === "") {
+                alert("Please select a food type.");
+                setIsSubmitting(false);
+                return;
+            }
+
+            if (date === undefined) {
+                alert("Please select a date.");
+                setIsSubmitting(false);
+                return;
+            }
+
+
+            const uploadedFile = props.files[0];
+            const filePath = `${uploadPath || ''}/${uploadedFile.name}`.replace(/^\/+/, '');
+            const { data: urlData } = supabase.storage
+                .from(bucketName)
+                .getPublicUrl(filePath);
+
+            if (!urlData?.publicUrl) {
+                throw new Error("Could not get public URL for the uploaded image.");
+            }
+            const imageUrl = urlData.publicUrl;
+
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                throw new Error("User not authenticated.");
+            }
+            const userId = user.id;
+
+            const { error: insertError } = await supabase
+                .from('food_items')
+                .insert([
+                    {
+                        name: name,
+                        category: foodType,
+                        quantity: quantity,
+                        expiry_date: date.toISOString(),
+                        image_url: imageUrl,
+                        user_id: userId,
+                    }
+                ]);
+
+            if (insertError) {
+                throw insertError;
+            }
+
+            // 5. Success feedback and reset/redirect
+            alert("Food item donated successfully!");
+            // Reset form state (optional, depends on desired UX)
+            // setName("");
+            // setFoodType("");
+            // setQuantity(null);
+            // setDate(undefined);
+            // props.setFiles([]); // Clear uploaded files from dropzone state
+            // props.setErrors([]); // Clear any previous errors
+            // props.successes = []; // Reset successes - might need a setter in the hook
+            navigate('/dashboard'); // Redirect to dashboard or another relevant page
+
+        } catch (error: unknown) { // Change type from any to Error
+            console.error("Donation error:", error);
+            console.log(error);
+            alert(`An error occurred: ${error || 'Please try again.'}`);
+        } finally {
+            setIsSubmitting(false); // Reset submitting state regardless of outcome
+        }
+    };
 
     return (
         <div className="flex h-screen items-center justify-center p-6 md:p-10">
-            <Card className="w-full max-w-[400px] px-4 py-8">
+            <Card className="w-full max-w-[800px] px-4 py-8">
             <CardHeader>
                 <CardTitle>Donate a Food</CardTitle>
             </CardHeader>
@@ -84,7 +164,7 @@ export function DonateForm() {
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="dairy">Dairy and Eggs</SelectItem>
+                  <SelectItem value="dairy_and_eggs">Dairy and Eggs</SelectItem>
                   <SelectItem value="meat">Meat</SelectItem>
                   <SelectItem value="vegetables">Vegatables</SelectItem>
                   <SelectItem value="fruits">Fruits</SelectItem>
@@ -133,8 +213,8 @@ export function DonateForm() {
                 </PopoverContent>
                 </Popover>
             </div>
-            <Button type="submit" className="w-full" >
-                Submit
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? 'Submitting...' : 'Submit'}
             </Button>
           </div>
         </form>

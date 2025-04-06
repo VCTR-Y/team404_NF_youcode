@@ -40,13 +40,13 @@ export function Navbar() {
         <div className="text-xl font-bold">Dashboard</div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <ModeToggle />
-            <Button>
+          <Button>
               <Link
                 to='/donate'>
                 Donate!
               </Link>
             </Button>
+            <ModeToggle />
             <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
               <DropdownMenuTrigger>
                 <Button variant="ghost" className="p-0">

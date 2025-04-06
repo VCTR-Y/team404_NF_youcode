@@ -41,6 +41,7 @@ function App() {
     <Routes>
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route path="/donate" element={<DonateForm />} />
     </Routes>
   ) : (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">

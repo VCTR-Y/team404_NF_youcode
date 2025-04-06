@@ -65,7 +65,8 @@ export function DonateForm() {
     }
 
     return (
-        <Card className="w-full max-w-[400px] px-4 py-8">
+        <div className="flex h-screen items-center justify-center p-6 md:p-10">
+            <Card className="w-full max-w-[400px] px-4 py-8">
             <CardHeader>
                 <CardTitle>Donate a Food</CardTitle>
             </CardHeader>
@@ -139,5 +140,6 @@ export function DonateForm() {
         </form>
             </CardContent>
         </Card>
+        </div>
     )
 }

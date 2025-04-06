@@ -6,6 +6,7 @@ import { Dashboard } from './components/dashboard'
 import { SignUpForm } from './components/sign-up-form'
 import { ForgotPasswordForm } from './components/forgot-password-form'
 import { UpdatePasswordForm } from './components/update-password-form'
+import { DonateForm } from './components/donate-form'
 
 function App() {
   const [session, setSession] = useState<boolean | null>(null)
@@ -36,12 +37,13 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="h-full w-full place-items-center antialiased ">
+      <div className="flex items-center justify-center place-items-center antialiased ">
         <Routes>
           {session ? (
             <>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/donate" element={<DonateForm />} />
             </>
           ) : (
             <>

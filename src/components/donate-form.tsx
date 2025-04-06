@@ -28,7 +28,8 @@ import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
+import { analyzeFoodImage } from "@/lib/food-analysis/service";
 
 
 export function DonateForm() {
@@ -62,6 +63,26 @@ export function DonateForm() {
                 return;
             }
 
+            if (date === undefined) {
+                try {
+                    const analysis = await analyzeFoodImage(props.files[0]);
+                    
+                    if (analysis.qualityState === 'expired') {
+                        alert("The AI analysis indicates this food item appears to be expired. Please verify and try again with fresh food.");
+                        setIsSubmitting(false);
+                        return;
+                    }
+
+                    setDate(new Date(analysis.predictedExpiryDate));
+                } catch (error: unknown) {
+                    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+                    console.error("AI Analysis error:", errorMessage);
+                    alert("Failed to analyze food image. Please manually select an expiry date.");
+                    setIsSubmitting(false);
+                    return;
+                }
+            }
+
             await props.onUpload();
 
             // if (props.errors.length > 0) {
@@ -78,12 +99,6 @@ export function DonateForm() {
 
             if (foodType === "") {
                 alert("Please select a food type.");
-                setIsSubmitting(false);
-                return;
-            }
-
-            if (date === undefined) {
-                alert("Please select a date.");
                 setIsSubmitting(false);
                 return;
             }

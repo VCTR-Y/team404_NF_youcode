@@ -9,12 +9,16 @@ import { FoodAnalysisResult, ImageAnalysisError } from "./types";
 // }`;
 
 const FOOD_ANALYSIS_PROMPT = `Today's date is ${new Date().toLocaleDateString()}. Analyze this food image and determine its freshness and expected expiry date. The date should be realistic`;
-const ai = new GoogleGenAI({apiKey: import.meta.env.VITE_GEMINI_API_KEY});
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+if (!apiKey) {
+  throw new Error('VITE_GEMINI_API_KEY environment variable is missing');
+}
+const ai = new GoogleGenAI({ apiKey });
 
 export async function analyzeFoodImage(imageFile: File): Promise<FoodAnalysisResult> {
   try {
 
-
+    
     const imageData = await fileToGenerativePart(imageFile);
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash",

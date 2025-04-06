@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
-import { Navbar } from './navbar'
-import { createClient } from '../lib/supabase/client'
-import { ImageAnalyzer } from './image-analyzer'
-import { Button } from './ui/button'
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom'; // Import Link
+import { Navbar } from './navbar';
+import { createClient } from '../lib/supabase/client';
+// import { ImageAnalyzer } from './image-analyzer'
+// import { Button } from './ui/button'
 
 type FoodCategory = 'dairy_and_eggs' | 'meat' | 'vegetables' | 'fruits' | 'grains' | 'beverages' | 'snacks' | 'condiments' | 'leftovers'
 
@@ -12,6 +13,7 @@ type FoodItem = {
   expiry_date: string
   category: FoodCategory
   quantity: number
+  image_url?: string
 }
 
 const categories: FoodCategory[] = [
@@ -29,7 +31,7 @@ const categories: FoodCategory[] = [
 export function Dashboard() {
   const [selectedCategory, setSelectedCategory] = useState<FoodCategory | null>(null)
   const [foodItems, setFoodItems] = useState<FoodItem[]>([])
-  const [showAnalyzer, setShowAnalyzer] = useState(false)
+  // const [showAnalyzer, setShowAnalyzer] = useState(false)
 
   const supabase = createClient()
 
@@ -88,7 +90,7 @@ export function Dashboard() {
             ))}
           </div>
 
-          <div className="flex justify-end mb-4">
+          {/* <div className="flex justify-end mb-4">
             <Button
               variant={showAnalyzer ? "secondary" : "default"}
               onClick={() => setShowAnalyzer(!showAnalyzer)}
@@ -97,18 +99,27 @@ export function Dashboard() {
             </Button>
           </div>
 
-          {showAnalyzer && <ImageAnalyzer />}
+          {showAnalyzer && <ImageAnalyzer />} */}
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {foodItems.map((item) => (
-              <div key={item.id} className="rounded-lg border bg-card p-6 shadow-sm">
+              <Link key={item.id} to={`/food/${item.id}`} className="block rounded-lg border bg-card p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+                {item.image_url && (
+                  <div className="mb-4">
+                  <img
+                    src={item.image_url} 
+                    alt={item.name}
+                    className="w-full h-48 object-cover rounded-md"
+                  />
+                  </div>
+                )}
                 <h3 className="font-semibold mb-2">{item.name}</h3>
                 <div className="space-y-1 text-sm text-muted-foreground">
                   <p>Category: {formatCategory(item.category)}</p>
                   <p>Quantity: {item.quantity}</p>
                   <p>Expires: {new Date(item.expiry_date).toLocaleDateString()}</p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

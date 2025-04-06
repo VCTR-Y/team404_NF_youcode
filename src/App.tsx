@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { LoginForm } from './components/login-form'
-import { Dashboard } from './components/dashboard'
-import { SignUpForm } from './components/sign-up-form'
-import { ForgotPasswordForm } from './components/forgot-password-form'
-import { UpdatePasswordForm } from './components/update-password-form'
+import { Dashboard } from './components/dashboard';
+import { SignUpForm } from './components/sign-up-form';
+import { ForgotPasswordForm } from './components/forgot-password-form';
+import { UpdatePasswordForm } from './components/update-password-form';
+import { FoodDetailPage } from './components/FoodDetailPage'; // Import the new component
 
 function App() {
   const [session, setSession] = useState<boolean | null>(null)
@@ -39,6 +40,7 @@ function App() {
   {session ? (
     <Routes>
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/food/:id" element={<FoodDetailPage />} /> {/* Add the food detail route */}
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   ) : (

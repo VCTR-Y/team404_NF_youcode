@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { createClient } from "../lib/supabase/client";
 import { Navbar } from "./navbar";
 import { generateRecipes } from "../lib/food-analysis/service";
+import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
 
 type FoodItemDetail = {
   id: string;
@@ -120,6 +122,9 @@ export function FoodDetailPage() {
 
         {foodItem && !loading && (
           <div className="rounded-lg border bg-card p-6 shadow-sm max-w-2xl mx-auto">
+            <Button className="absolute top-18 right-4">
+                <Link to="/dashboard">Back</Link>
+            </Button>
             {foodItem.image_url && (
               <div className="mb-4">
                 <img

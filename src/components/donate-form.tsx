@@ -30,6 +30,7 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { analyzeFoodImage } from "@/lib/food-analysis/service";
+import { Link } from "react-router-dom";
 
 
 export function DonateForm() {
@@ -163,8 +164,11 @@ export function DonateForm() {
     return (
         <div className="flex h-screen items-center justify-center p-6 md:p-10">
             <Card className="w-full max-w-[800px] px-4 py-8">
+            <Button className="absolute top-4 right-4">
+                <Link to="/dashboard">Back</Link>
+            </Button>
             <CardHeader>
-                <CardTitle>Donate a Food</CardTitle>
+                <CardTitle className="text-2xl">Donate a Food</CardTitle>
             </CardHeader>
             <CardContent>
             <form onSubmit={submitForm} className="space-y-4">  

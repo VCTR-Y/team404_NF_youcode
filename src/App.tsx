@@ -8,6 +8,7 @@ import { ForgotPasswordForm } from './components/forgot-password-form';
 import { UpdatePasswordForm } from './components/update-password-form';
 import { FoodDetailPage } from './components/FoodDetailPage'; // Import the new component
 import { DonateForm } from './components/donate-form';
+import { PlatefulLandingPage } from './components/LandingPage'
 
 function App() {
   const [session, setSession] = useState<boolean | null>(null)
@@ -52,7 +53,8 @@ function App() {
         <Route path="/signup" element={<SignUpForm className="w-full max-w-[400px]" />} />
         <Route path="/forgot-password" element={<ForgotPasswordForm className="w-full max-w-[400px]" />} />
         <Route path="/update-password" element={<UpdatePasswordForm className="w-full max-w-[400px]" />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="/landingPage" element={<PlatefulLandingPage />} />
+        <Route path="*" element={<Navigate to="/landingPage" replace />} />
       </Routes>
     </div>
   )}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { Toaster } from 'sonner'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { LoginForm } from './components/login-form'
 import { Dashboard } from './components/dashboard';
@@ -38,6 +39,8 @@ function App() {
   // }
 
   return (
+<>
+<Toaster position="top-center" />
 <BrowserRouter>
   {session ? (
     <Routes>
@@ -59,6 +62,7 @@ function App() {
     </div>
   )}
 </BrowserRouter>
+</>
   )
 }
 

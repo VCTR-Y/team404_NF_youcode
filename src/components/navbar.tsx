@@ -13,6 +13,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useEffect, useState } from 'react'
 import { ModeToggle } from './mode-toggle'
+import { Link } from 'react-router-dom'
+
 
 export function Navbar() {
   const [userEmail, setUserEmail] = useState<string | null>(null)
@@ -38,6 +40,12 @@ export function Navbar() {
         <div className="text-xl font-bold">Dashboard</div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
+          <Button>
+              <Link
+                to='/donate'>
+                Donate!
+              </Link>
+            </Button>
             <ModeToggle />
             <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
               <DropdownMenuTrigger>
